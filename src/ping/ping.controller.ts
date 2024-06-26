@@ -1,6 +1,16 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { PingService } from './ping.service';
 
+interface testPost {
+    name: string,
+    age: number,
+}
+export interface testQuery {
+    dni: string
+}
+export interface testParam {
+    adress: string
+}
 @Controller('test')
 export class PingController {
     PingService: PingService;
@@ -8,20 +18,27 @@ export class PingController {
     constructor(PingService: PingService){
         this.PingService = PingService
     }
-
     @Get('/ping')
     pingServer() {
         return this.PingService.pingServer
     }
-
-    @Get('/test')
-    testPing () {
-        return this.PingService.testPing
+    @Get('ping/:adress')
+    testParam(@Param() adress: testParam){
+        return adress.adress
+    }
+    @Get('/testQuery')
+    testPing (@Query() qry: testQuery) {
+        return this.PingService.testPing(qry)
     }
 
     @Post('postTest')
-    testPost (){
-        return "created"
+    testPost (@Body() req: testPost): testPost{
+
+        const person = {
+            name: req.name,
+            age: req.age
+        }
+        return person
     }
 
 }
