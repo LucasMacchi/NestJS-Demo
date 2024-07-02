@@ -1,16 +1,7 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PingService } from './ping.service';
+import { testPost, testQuery, testParam } from 'src/dtos';
 
-interface testPost {
-    name: string,
-    age: number,
-}
-export interface testQuery {
-    dni: string
-}
-export interface testParam {
-    adress: string
-}
 @Controller('test')
 export class PingController {
     PingService: PingService;
@@ -27,11 +18,13 @@ export class PingController {
         return adress.adress
     }
     @Get('/testQuery')
-    testPing (@Query() qry: testQuery) {
+    testPing (@Query('dni', ParseIntPipe) qry: testQuery) {
+        console.log(typeof qry)
         return this.PingService.testPing(qry)
     }
 
     @Post('postTest')
+    @UsePipes(new ValidationPipe)
     testPost (@Body() req: testPost): testPost{
 
         const person = {

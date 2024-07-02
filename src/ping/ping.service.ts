@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { testQuery } from './ping.controller';
+import { testQuery } from 'src/dtos';
 @Injectable()
 export class PingService {
 
